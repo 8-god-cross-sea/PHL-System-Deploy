@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: postgres
+  backend:
+    build: PHL-System-backend
+    command: >
+     bash -c "python manage.py init_db &&
+              gunicorn app:app -w8 -b0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  frontend:
+    build: PHL-System-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
